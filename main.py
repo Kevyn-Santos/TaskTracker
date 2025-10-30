@@ -1,18 +1,24 @@
 import json
 from datetime import datetime
 
+
 tarefas = []
 
 def Criar_Tarefa():
 
     descricao = input("\nDescreva Sua Tarefa: ")
     
-    tarefas.append({
-        'id': len(tarefas) +1,
-        'Descrição': descricao,
-        'Status': 'Todo',
-        'Data de Criação': datetime.today().strftime('%d/%m/%Y')
-        })
+    JsonString ={
+            'id': len(tarefas) +1,
+            'Descrição': descricao,
+            'Status': 'Todo',
+            'Data de Criação': datetime.today().strftime('%d/%m/%Y')
+            }
+    
+    tarefas.append(JsonString)
+    
+    with open('tarefas.json', 'w', encoding='utf8', newline= '\n') as f:
+        json.dump(tarefas, f, indent=4, ensure_ascii=False)
 
     print(f'\nTarefa adicionada com sucesso\n')
 
