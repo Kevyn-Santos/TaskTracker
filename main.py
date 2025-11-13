@@ -1,10 +1,32 @@
 import json
 from datetime import datetime
 
+def Ler_tarefas():
+    try:
+        with open('tarefas.json', 'r', encoding='utf-8') as tasks:
+            tarefasAtuais = json.load(tasks)
+            
+            for i in range(len(tarefasAtuais)):
+                print(tarefasAtuais[i])
+        return tarefasAtuais
+    except: 
+        print('Não ha tarefas no arquivo')
+        return
 
-tarefas = []
 
 def Criar_Tarefa():
+    tarefas_arquivo = Ler_tarefas()
+
+    if tarefas_arquivo == None:
+        # tarefas_arquivo = 0
+        tarefas = []
+        print(f'Existem estas tarefas na lista vazia: {tarefas}')
+    else:
+        # print(f'a função Ler_tarefas() retorna -> {tarefas_arquivo}')
+        print(f'Existem {len(tarefas_arquivo)} tarefas no arquivo')
+        tarefas = list(tarefas_arquivo)
+        print(f'Existem estas tarefas na lista: {tarefas}')
+        
 
     descricao = input("\nDescreva Sua Tarefa: ")
     
@@ -17,8 +39,8 @@ def Criar_Tarefa():
     
     tarefas.append(JsonString)
     
-    with open('tarefas.json', 'w', encoding='utf8', newline= '\n') as f:
-        json.dump(tarefas, f, indent=4, ensure_ascii=False)
+    with open('tarefas.json', 'w', encoding='utf8') as tasks:
+        json.dump(tarefas, tasks, indent=4, ensure_ascii=False)
 
     print(f'\nTarefa adicionada com sucesso\n')
 
@@ -27,27 +49,43 @@ def Criar_Tarefa():
 
 def Listar_tarefas():
 
-    for i in range(len(tarefas)):
-        print(tarefas[i])
+    with open('tarefas.json', 'r', encoding='utf-8') as tasks:
+        tarefasAtuais = json.load(tasks)
+        
+        for i in range(len(tarefasAtuais)):
+            print(tarefasAtuais[i])
 
     main()
-    return
 
 def Atualizar_tarefa():
     print('\nselecione o ID de uma tarefa: ')
 
-    for i in range(len(tarefas)):
-        print(tarefas[i])
+    with open('tarefas.json', 'r', encoding='utf-8') as tasks:
+        tarefasAtuais = json.load(tasks)
+        
+        for i in range(len(tarefasAtuais)):
+            print(tarefasAtuais[i])
 
-    IndiceSelecionado = int(input('')) -1
-    TarefaSelecionada = tarefas[IndiceSelecionado]
-    TarefaSelecionada['Descrição'] = input("Coloque a nova descrição: ")
-    TarefaSelecionada['Data de Atualização'] = "Atualizado pela ultima vez em: " + datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+        IndiceSelecionado = int(input('')) -1
 
-    print("\nDescrição alterada com sucesso\n")
+        print(f'\nTarefa selecionada: {tarefasAtuais[IndiceSelecionado]}')
+        print(f'Descrição da tarefa selecionada: {tarefasAtuais[IndiceSelecionado]["Descrição"]} \n')
+
+        novaDescricao = input("Coloque a nova descrição: ")
+        
+        tarefasAtuais[IndiceSelecionado]['Descrição'] = novaDescricao
+        tarefasAtuais[IndiceSelecionado]['Data de Atualização'] = "Atualizado pela ultima vez em: " + datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+
+        print(f'\nNova descrição: {novaDescricao}')
+        print(f'{tarefasAtuais[IndiceSelecionado]["Data de Atualização"]}\n')
+
+    with open('tarefas.json', 'w', encoding='utf-8') as tasks:
+        json.dump(tarefasAtuais, tasks, indent=4, ensure_ascii=False)
+    
+    print(f"\nDescrição alterada com sucesso para: {novaDescricao}\n")
 
     main()
-    return
+    return 
 
 def main():
     opcao = input("""Selecione o que deseja fazer:             
